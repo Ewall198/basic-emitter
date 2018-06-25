@@ -19,6 +19,13 @@ class TestEmitter extends BasicEmitter {
     testAfterFunc(val) {
         return val;
     }
+
+    @should('Combined')
+    @before('Combined')
+    @after('Combined')
+    combinedFunc(val) {
+        return val;
+    }
 }
 
 test('fire and subscription works', () => {
@@ -98,5 +105,19 @@ test('should cancel func wrapper works', () => {
     expect(result).toBe(undefined);
 });
 
-const emitter = new TestEmitter();
-console.log({emitter})
+test('combined func', (done) => {
+    const testEmitter = new TestEmitter();
+    let listenerCallCount = 0;
+    const listener = (details) => {
+        listenerCallCount += 1;
+        if(listenerCallCount == 3) {
+            done();
+        }
+        return true;
+    }
+    testEmitter.addEventListener('shouldCombined', listener);
+    testEmitter.addEventListener('beforeCombined', listener);
+    testEmitter.addEventListener('afterCombined', listener);
+    let result = testEmitter.combinedFunc('Hello World');
+    expect(result).toBe('Hello World');
+});

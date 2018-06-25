@@ -7,9 +7,10 @@ function _eventWrapper(prependEventName, baseEventName=null, wrappedFunc) {
     const wrapper = (target, name, descriptor) => {
         baseEventName = baseEventName || name;
         const eventName = prependEventName + baseEventName;
-        const func = target[name];
+        const func = descriptor.value;
         function _wrappedFunc (...args) {
-            return wrappedFunc(this, eventName, func, ...args);
+            return wrappedFunc.apply(this, [eventName, func, ...args]);
+            // return wrappedFunc(this, eventName, func, ...args);
         }
         descriptor.value = _wrappedFunc;
         // descriptor.value = wrappedFunc.bind(null, target, eventName, func);
@@ -22,9 +23,9 @@ function _eventWrapper(prependEventName, baseEventName=null, wrappedFunc) {
  * @returns {Function} Function wrapper.
  */
 function before(baseEventName=null) {
-    function wrappedFunc(target, eventName, func, ...args) {
-        target.fire(eventName, ...args);
-        return func(...args);
+    function wrappedFunc(eventName, func, ...args) {
+        this.fire.apply(this, [eventName, ...args]);
+        return func.apply(this, args);
     }
     return _eventWrapper(
         'before',
@@ -38,9 +39,9 @@ function before(baseEventName=null) {
  * @returns {Function} Function wrapper.
  */
 function after(baseEventName=null) {
-    function wrappedFunc(target, eventName, func, ...args) {
-        setTimeout(() => {target.fire(eventName, ...args)}, 1);
-        return func(...args);
+    function wrappedFunc(eventName, func, ...args) {
+        setTimeout(() => {this.fire.apply(this, [eventName, ...args])}, 1);
+        return func.apply(this, args);
     }
     return _eventWrapper(
         'after',
@@ -56,11 +57,11 @@ function after(baseEventName=null) {
  * @returns {Function} Function wrapper.
  */
 function should(baseEventName=null) {
-    function wrappedFunc(target, eventName, func, ...args) {
-        let fireResponses = target.fire(eventName, ...args);
+    function wrappedFunc(eventName, func, ...args) {
+        let fireResponses = this.fire.apply(this, [eventName, ...args]);
         let shouldCallFunc = fireResponses.every(val => val != false);
         if(shouldCallFunc) {
-            return func(...args);
+            return func.apply(this, args);
         }
     }
     return _eventWrapper(
