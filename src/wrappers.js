@@ -17,8 +17,8 @@ function _eventWrapper(prependEventName, baseEventName=null, wrappedFunc) {
     return wrapper;
 }
 
-/** Creates a wrapper which will fire event: 'before' + eventName any time the function is called.
- * @param {String} baseEventName The name of the event that gets fire. Defaults to name of wrapped function.
+/** Creates a wrapper which will fire event: 'before' + eventName before the function is called.
+ * @param {String} baseEventName The name of the event that gets fired. Defaults to name of wrapped function.
  * @returns {Function} Function wrapper.
  */
 function before(baseEventName=null) {
@@ -33,6 +33,10 @@ function before(baseEventName=null) {
     );
 }
 
+/** Creates a wrapper which will fire event: 'after' + eventName after the function is called.
+ * @param {String} baseEventName The name of the event that gets fired. Defaults to name of wrapped function.
+ * @returns {Function} Function wrapper.
+ */
 function after(baseEventName=null) {
     function wrappedFunc(target, eventName, func, ...args) {
         setTimeout(() => {target.fire(eventName, ...args)}, 1);
@@ -45,7 +49,12 @@ function after(baseEventName=null) {
     );
 }
 
-
+/** Creates a wrapper which will fire event: 'should' + eventName before the function is called.
+ *      If any listeners return false then the wrapped function will not be called. 
+ *      It is suggested that this be the top level event decorator.
+ * @param {String} baseEventName The name of the event that gets fired. Defaults to name of wrapped function.
+ * @returns {Function} Function wrapper.
+ */
 function should(baseEventName=null) {
     function wrappedFunc(target, eventName, func, ...args) {
         let fireResponses = target.fire(eventName, ...args);

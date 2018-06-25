@@ -5,26 +5,18 @@ const should = lib.should;
 const after = lib.after;
 
 class TestEmitter extends BasicEmitter {
-    
-    // @should('Test')
-    // @before('Test')
-    // @after('Test')
-    // testFunc(val) {
-    //     return val;
-    // }
-
     @should('Test')
     testShouldFunc(val) {
         return val;
     }
 
-    @after('Test')
-    testAfterFunc(val) {
+    @before('Test')
+    testBeforeFunc(val) {
         return val;
     }
 
-    @before('Test')
-    testBeforeFunc(val) {
+    @after('Test')
+    testAfterFunc(val) {
         return val;
     }
 }
