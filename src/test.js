@@ -1,8 +1,8 @@
 const lib = require('./index.js');
 const BasicEmitter = lib.BasicEmitter;
-const before = lib.before;
-const should = lib.should;
-const after = lib.after;
+const before = lib.decorators.before;
+const should = lib.decorators.should;
+const after = lib.decorators.after;
 
 class TestEmitter extends BasicEmitter {
     @should('Test')

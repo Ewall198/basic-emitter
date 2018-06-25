@@ -1,9 +1,7 @@
 const BasicEmitter = require('./emitter').BasicEmitter;
-const wrappers = require('./wrappers');
+const decorators = require('./decorators');
 
 module.exports = {
     BasicEmitter,
-    before: wrappers.before,
-    should: wrappers.should,
-    after: wrappers.after
+    decorators
 };
