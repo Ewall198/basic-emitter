@@ -1,7 +1,7 @@
-const BasicEmitter = require('./emitter').BasicEmitter;
-const decorators = require('./decorators');
+import {BasicEmitter} from './emitter';
+import * as decorators from './decorators';
 
-module.exports = {
+export {
     BasicEmitter,
     decorators
 };

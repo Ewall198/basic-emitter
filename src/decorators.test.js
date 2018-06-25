@@ -1,4 +1,4 @@
-const lib = require('./index.js');
+import * as lib from './index.js';
 const BasicEmitter = lib.BasicEmitter;
 const before = lib.decorators.before;
 const should = lib.decorators.should;
